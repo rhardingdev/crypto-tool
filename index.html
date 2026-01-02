@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Average Price Calculator</title>
+    <style>
+        :root { --primary: #F7931A; --bg: #0f111a; --card: #1a1d29; --text: #e0e0e0; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+        .container { max-width: 500px; margin: 0 auto; background: var(--card); padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        h2 { color: var(--primary); text-align: center; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .entry-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; background: #0f111a; border: 1px solid #333; border-radius: 8px; color: white; font-size: 1rem; }
+        input:focus { border-color: var(--primary); outline: none; }
+        label { font-size: 0.8rem; color: #888; margin-bottom: 4px; display: block; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        button { flex: 1; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .btn-calc { background: var(--primary); color: #000; }
+        .btn-add { background: #333; color: white; }
+        .result-box { margin-top: 25px; padding: 20px; background: #0f111a; border-radius: 12px; border-left: 4px solid var(--primary); text-align: center; display: none; }
+        .big-val { font-size: 2rem; font-weight: bold; color: white; margin: 5px 0; }
+        .small-val { font-size: 0.9rem; color: #aaa; }
+        
+        /* Simulated Ad Placeholder */
+        .ad-space { margin-top: 20px; padding: 15px; border: 1px dashed #444; color: #666; font-size: 0.8rem; text-align: center; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Average Price Calc</h2>
+    <p style="text-align:center; color:#777; font-size:0.9rem;">Calculate your break-even point for Bitcoin/Crypto.</p>
+
+    <div id="entries">
+        <div class="entry-row">
+            <div style="flex:1">
+                <label>Amount (Coins)</label>
+                <input type="number" class="amt" placeholder="0.5">
+            </div>
+            <div style="flex:1">
+                <label>Price Bought ($)</label>
+                <input type="number" class="price" placeholder="45000">
+            </div>
+        </div>
+        <div class="entry-row">
+            <div style="flex:1">
+                <input type="number" class="amt" placeholder="0.1">
+            </div>
+            <div style="flex:1">
+                <input type="number" class="price" placeholder="62000">
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-add" onclick="addRow()">+ Add Buy</button>
+        <button class="btn-calc" onclick="calculate()">Calculate Average</button>
+    </div>
+
+    <div class="result-box" id="result">
+        <div class="small-val">Your Average Entry Price</div>
+        <div class="big-val" id="avgPrice">$0.00</div>
+        <div class="small-val" id="totalStats">Total Coins: 0 | Total Cost: $0</div>
+    </div>
+
+    <div class="ad-space">
+        [Ad Space: Best Hardware Wallet for Safety?]
+    </div>
+</div>
+
+<script>
+    function addRow() {
+        const div = document.createElement('div');
+        div.className = 'entry-row';
+        div.innerHTML = `
+            <div style="flex:1"><input type="number" class="amt" placeholder="Amount"></div>
+            <div style="flex:1"><input type="number" class="price" placeholder="Price"></div>
+        `;
+        document.getElementById('entries').appendChild(div);
+    }
+
+    function calculate() {
+        let amts = document.querySelectorAll('.amt');
+        let prices = document.querySelectorAll('.price');
+        let totalCoins = 0;
+        let totalCost = 0;
+
+        for(let i=0; i<amts.length; i++) {
+            let a = parseFloat(amts[i].value);
+            let p = parseFloat(prices[i].value);
+            if(!isNaN(a) && !isNaN(p)) {
+                totalCoins += a;
+                totalCost += (a * p);
+            }
+        }
+
+        if(totalCoins > 0) {
+            let avg = totalCost / totalCoins;
+            document.getElementById('avgPrice').innerText = "$" + avg.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('totalStats').innerText = `Total Coins: ${totalCoins} | Total Cost: $${totalCost.toLocaleString()}`;
+            document.getElementById('result').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
